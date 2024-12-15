@@ -1,0 +1,41 @@
+// App.js (React Native Example)
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button } from 'react-native';
+
+const App = () => {
+    const [customer, setCustomer] = useState(null);
+
+    useEffect(() => {
+        fetch('https://your-backend-url.com/api/customer')
+            .then(response => response.json())
+            .then(data => setCustomer(data));
+    }, []);
+
+    const earnPoints = (amount) => {
+        fetch(`https://your-backend-url.com/loyalty/earn/${amount}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${your_auth_token}`
+            }
+        }).then(response => response.json())
+          .then(data => setCustomer(data));
+    };
+
+    return (
+        <View>
+            {customer ? (
+                <>
+                    <Text>Welcome, {customer.username}!</Text>
+                    <Text>Your Points: {customer.points}</Text>
+                    <Button title="Earn Points" onPress={() => earnPoints(100)} />
+                </>
+            ) : (
+                <Text>Loading...</Text>
+            )}
+        </View>
+    );
+};
+
+export default App;
